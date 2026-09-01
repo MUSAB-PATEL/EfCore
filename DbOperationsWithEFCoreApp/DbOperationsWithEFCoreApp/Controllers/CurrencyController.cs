@@ -29,13 +29,13 @@ namespace DbOperationsWithEFCoreApp.Controllers
         [HttpGet("GetCurrencyByTitle")]
         public async Task<IActionResult> GetCurrencyByTitle(string title, string description)
         {
-            //var result = await _appDbContext.Currencies.FirstOrDefaultAsync(c => c.Title == title && c.Description == description );
-            var result = await _appDbContext.Currencies.Where(c => c.Title == title && c.Description == description).ToListAsync();
+            var result = await _appDbContext.Currencies.FirstOrDefaultAsync(c => c.Title == title && c.Description == description );
+            //var result = await _appDbContext.Currencies.Where(c => c.Title == title && c.Description == description).ToListAsync();
 
             return Ok(result);
         }
 
-        [HttpPost("GetMultipleCurrenciesByIds")]
+        [HttpGet("GetMultipleCurrenciesByIds")]
         public async Task<IActionResult> GetMultipleCurrenciesByIds([FromBody] List<int> ids)
         {
             var result = await _appDbContext.Currencies.
