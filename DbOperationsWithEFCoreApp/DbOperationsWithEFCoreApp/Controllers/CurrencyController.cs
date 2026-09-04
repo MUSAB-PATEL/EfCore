@@ -15,7 +15,7 @@ namespace DbOperationsWithEFCoreApp.Controllers
         {
             //var result = _appDbContext.Currencies.ToList();
             var result = await (from currencies in _appDbContext.Currencies
-                                select currencies).ToListAsync();
+                                select currencies).AsNoTracking().ToListAsync();
             return Ok(result);
         }
 
@@ -29,7 +29,7 @@ namespace DbOperationsWithEFCoreApp.Controllers
         [HttpGet("GetCurrencyByTitle")]
         public async Task<IActionResult> GetCurrencyByTitle(string title, string description)
         {
-            var result = await _appDbContext.Currencies.FirstOrDefaultAsync(c => c.Title == title && c.Description == description );
+            var result = await _appDbContext.Currencies.AsNoTracking().FirstOrDefaultAsync(c => c.Title == title && c.Description == description );
             //var result = await _appDbContext.Currencies.Where(c => c.Title == title && c.Description == description).ToListAsync();
 
             return Ok(result);
@@ -38,8 +38,9 @@ namespace DbOperationsWithEFCoreApp.Controllers
         [HttpGet("GetMultipleCurrenciesByIds")]
         public async Task<IActionResult> GetMultipleCurrenciesByIds([FromBody] List<int> ids)
         {
-            var result = await _appDbContext.Currencies.
-                Where(c => ids.Contains(c.Id))
+            var result = await _appDbContext.Currencies
+                .AsNoTracking()
+                .Where(c => ids.Contains(c.Id))
                 //.Select(c => new { c.Id, c.Title, c.Description }) //Anonymous type
                 .Select(c => new Currency()
                 {
